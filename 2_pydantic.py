@@ -1,27 +1,33 @@
 from pydantic import BaseModel #ye class hame almost hamesha import karni padti hai
-from typing import List, Dict
+from typing import List, Dict, Optional
+
+
 #Step 1 : create a pydantic model where we have defined our schema
 class Patient(BaseModel):
     name:str
     age:int #with these two we are performing type validation
     weight:float
-    married:bool
-    allergies:List[str]
-    contact_details: Dict[str, str] #means contact details me ek dictionary import karenge
-    #jisme jo key hai vo bhi string hai and jo vlaue hai vo bhi string hai
+    married:Optional[bool] = False #matlab hai ki married ko by default false rakhna hai.
+    allergies:Optional[List[str]] = None #means allergies khudme list hoga but uske andar ka har item string hoga
+    #Mai inn above inputs ko optional bhi bana sakta hu by importing the optional library
 
+    contact_details: Dict[str, str] #same goes for this 'Dict' #means contact details me ek dictionary import karenge jisme har key string honi chahiye aur har value bhi string honi chahiye.
+    #jisme jo key hai vo bhi string hai and jo vlaue hai vo bhi string hai
+    
 def insert_patient_data(patient: Patient):
     print(patient.name)
     print(patient.age) #yaha dono jagah pe hamne OOP lagaya hai
+    print(patient.allergies)
     print('inserted')
 
 def updated_patient_data(patient: Patient):
     print(patient.name)
     print(patient.age) #yaha dono jagah pe hamne OOP lagaya hai
+    print(patient.allergies) #ab maine agar allergies nahi insert kari hogi to None show karega
     print('updated')
 
 #Step 2 : now we will make an object for our class. usse pehle we will create a dictionary
-patient_info = {'name':'Jay', 'age':20, 'weight':60.0, 'married':False, 'allergies':['pollen', 'dust'], 'contact_details': {'email':'abc@gmail.com', 'phone': '89745920267'}}
+patient_info = {'name':'Jay', 'age':20, 'weight':60.0, 'married':False, 'allergies':['pollen', 'dust'], 'contact_details': {'email':'abc@gmail.com', 'phone': '89745920267'}} #isme hame saari details as per the data type defined deni hai warna code work nahi karega
  
     #dictionary ki help se mai apne object ko intantiate karunga
 patient1 = Patient(**patient_info)
