@@ -1,13 +1,22 @@
-from pydantic import BaseModel #ye class hame almost hamesha import karni padti hai
+from pydantic import BaseModel, EmailStr, AnyUrl, Field #ye class hame almost hamesha import karni padti hai
 from typing import List, Dict, Optional
 
 
 #Step 1 : create a pydantic model where we have defined our schema
 class Patient(BaseModel):
     name:str
-    age:int #with these two we are performing type validation
-    weight:float
+
+    email:EmailStr #ab ham koi bhi email denge to vo validate hoga against this custom datatype
+    #now the code will run but agar maine email me se '@' hata diya to ye ek validation error raise karega.
+
+    linkedin_url:AnyUrl
+
+    age:int = Field(gt=0, lt=120) #with these two we are performing type validation #hamne field ki help se range definr kar di.
+
+    weight:float = Field(gt=0) #so that koi negative values nahi de paaye #gt means greater than 
+
     married:Optional[bool] = False #matlab hai ki married ko by default false rakhna hai.
+
     allergies:Optional[List[str]] = None #means allergies khudme list hoga but uske andar ka har item string hoga
     #Mai inn above inputs ko optional bhi bana sakta hu by importing the optional library
 
@@ -27,7 +36,7 @@ def updated_patient_data(patient: Patient):
     print('updated')
 
 #Step 2 : now we will make an object for our class. usse pehle we will create a dictionary
-patient_info = {'name':'Jay', 'age':20, 'weight':60.0, 'married':False, 'allergies':['pollen', 'dust'], 'contact_details': {'email':'abc@gmail.com', 'phone': '89745920267'}} #isme hame saari details as per the data type defined deni hai warna code work nahi karega
+patient_info = {'name':'Jay', 'email': 'abc@gmail.com', 'linkedin_url':'http://linkedin.com/1625', 'age':20, 'weight':60.0, 'married':False, 'allergies':['pollen', 'dust'], 'contact_details': {'phone': '89745920267'}} #isme hame saari details as per the data type defined deni hai warna code work nahi karega
  
     #dictionary ki help se mai apne object ko intantiate karunga
 patient1 = Patient(**patient_info)
