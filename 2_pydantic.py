@@ -1,10 +1,10 @@
 from pydantic import BaseModel, EmailStr, AnyUrl, Field #ye class hame almost hamesha import karni padti hai
-from typing import List, Dict, Optional
-
+from typing import List, Dict, Optional, Annotated
+#Pydantic is a library and typing is a module. 
 
 #Step 1 : create a pydantic model where we have defined our schema
 class Patient(BaseModel):
-    name:str
+    name:str = Annotated[str, Field(max_length=50, title='Name of the patient', description='Give the name of the patient in less than 50 chars', examples=['Jay', 'Raj'])] #Yaha pe hamne field ki help se constraint bhi lagaya aur metadata bhi add kiya
 
     email:EmailStr #ab ham koi bhi email denge to vo validate hoga against this custom datatype
     #now the code will run but agar maine email me se '@' hata diya to ye ek validation error raise karega.
@@ -13,14 +13,15 @@ class Patient(BaseModel):
 
     age:int = Field(gt=0, lt=120) #with these two we are performing type validation #hamne field ki help se range definr kar di.
 
-    weight:float = Field(gt=0) #so that koi negative values nahi de paaye #gt means greater than 
+    weight:Annotated[float, Field(gt=0, strict=True)] #so that koi negative values nahi de paaye #gt means greater than 
 
-    married:Optional[bool] = False #matlab hai ki married ko by default false rakhna hai.
+    married:Annotated[bool, Field(default=None, description='Is the patient married or not')] = False #matlab hai ki married ko by default false rakhna hai.
 
-    allergies:Optional[List[str]] = None #means allergies khudme list hoga but uske andar ka har item string hoga
+    allergies:Annotated[Optional[List[str]], Field(default=None, max_length=5)] #means allergies khudme list hoga but uske andar ka har item string hoga
     #Mai inn above inputs ko optional bhi bana sakta hu by importing the optional library
+    #Field use karne se ab user 5 se zyada allergies input nahi kar payega
 
-    contact_details: Dict[str, str] #same goes for this 'Dict' #means contact details me ek dictionary import karenge jisme har key string honi chahiye aur har value bhi string honi chahiye.
+    contact_details: Dict[str, str] #same goes for  this 'Dict' #means contact details me ek dictionary import karenge jisme har key string honi chahiye aur har value bhi string honi chahiye.
     #jisme jo key hai vo bhi string hai and jo vlaue hai vo bhi string hai
     
 def insert_patient_data(patient: Patient):
