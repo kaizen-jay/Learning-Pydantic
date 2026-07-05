@@ -22,6 +22,11 @@ class Patient(BaseModel):
             raise ValueError('Not a valid domain')
         return value
 
+    #Now we will create another field validator for capital letters in name
+    @field_validator('name')
+    @classmethod
+    def transform_name(cls, value):
+        return value.upper()
     
 
 
@@ -32,7 +37,7 @@ def updated_patient_data(patient: Patient):
     print(patient.allergies) #ab maine agar allergies nahi insert kari hogi to None show karega
     print('updated')
 
-patient_info = {'name':'Jay', 'email': 'abc@hdfc .com',  'age':20, 'weight':60.0, 'married':False, 'allergies':['pollen', 'dust'], 'contact_details': {'phone': '89745920267'}} 
+patient_info = {'name':'jay', 'email': 'abc@hdfc.com',  'age':20, 'weight':60.0, 'married':False, 'allergies':['pollen', 'dust'], 'contact_details': {'phone': '89745920267'}} 
 
 patient1 = Patient(**patient_info)
 
