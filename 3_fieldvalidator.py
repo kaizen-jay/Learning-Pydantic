@@ -27,7 +27,14 @@ class Patient(BaseModel):
     @classmethod
     def transform_name(cls, value):
         return value.upper()
-    
+     
+    @field_validator('age', mode='before')
+    @classmethod
+    def validate_age(cls, value):
+        if 0 < value < 100:
+            return value
+        else:
+            raise ValueError('Age must be in between 0-100')
 
 
 
@@ -39,6 +46,6 @@ def updated_patient_data(patient: Patient):
 
 patient_info = {'name':'jay', 'email': 'abc@hdfc.com',  'age':20, 'weight':60.0, 'married':False, 'allergies':['pollen', 'dust'], 'contact_details': {'phone': '89745920267'}} 
 
-patient1 = Patient(**patient_info)
+patient1 = Patient(**patient_info)# isi step me vlaidation perform hota hai aur type coersion bhi 
 
 updated_patient_data(patient1)
